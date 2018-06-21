@@ -25,7 +25,11 @@ write_profile() {
 
   # Set the home directory to be the subdir and source all profiles that
   # were placed here by the invoked buildpack
-  echo "export HOME=$subdir && source $subdir/.profile.d/*" > $root_dir/.profile.d/heroku-subdir-init.sh
+  echo "export HOME=$subdir"                     > $root_dir/.profile.d/heroku-subdir-init.sh
+  echo ""                                       >> $root_dir/.profile.d/heroku-subdir-init.sh
+  echo "for script in $subdir/.profile.d/*; do" >> $root_dir/.profile.d/heroku-subdir-init.sh
+  echo "  source \$script"                      >> $root_dir/.profile.d/heroku-subdir-init.sh
+  echo "done"                                   >> $root_dir/.profile.d/heroku-subdir-init.sh
 }
 
 

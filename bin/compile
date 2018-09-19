@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 set -e
+## Enabling -x helps for debugging
+#set -x
 
 BUILD_DIR=${1:-}
 CACHE_DIR=${2:-}
@@ -79,11 +81,7 @@ execute_buildpack_at_subdir() {
 
     if [ $? == 0 ]; then
       echo "=====> Detected Framework: $framework"
-      # echo "-----> Compiling with BUILD_DIR: $1, SUB_DIR: $subdir"
-      # echo "-----> Ls BUILD_DIR: $(ls -la $1)"
-      # echo "-----> Ls \$3: $(ls -la $3)"
-      # echo "-----> Ls \$2: $(ls -la $2)"
-      # echo "-----> Ls SUB_DIR(\$1/\$subdir): $(ls -la $1/$subdir)"
+
       # bin/compile BUILD_DIR CACHE_DIR ENV_DIR
       $dir/bin/compile $BUILD_DIR/$subdir $CACHE_DIR $ENV_DIR
 
@@ -96,18 +94,16 @@ execute_buildpack_at_subdir() {
         source $dir/export
       fi
 
-      if [ ! -z $subdir ]; then
-        # check if the buildpack left any executables behind
-        if [ -d $1/$subdir/.heroku ]; then
-          mkdir -p $1/.heroku
-          cp -R $1/$subdir/.heroku/* $1/.heroku
-        fi
+      # check if the buildpack left any executables behind
+      if [ -d $BUILD_DIR/$subdir/.heroku ]; then
+        mkdir -p $BUILD_DIR/.heroku
+        cp -R $BUILD_DIR/$subdir/.heroku/* $BUILD_DIR/.heroku
+      fi
 
-        # check if the buildpack left any .profile.d scripts behind
-        if [ -d $1/$subdir/.profile.d ]; then
-          mkdir -p $1/.profile.d
-          cp -R $1/$subdir/.profile.d/* $1/.profile.d
-        fi
+       # check if the buildpack left any .profile.d scripts behind
+      if [ -d $BUILD_DIR/$subdir/.profile.d ]; then
+        mkdir -p $BUILD_DIR/.profile.d
+        cp -R $BUILD_DIR/$subdir/.profile.d/* $BUILD_DIR/.profile.d
       fi
 
       if [ -x $dir/bin/release ]; then

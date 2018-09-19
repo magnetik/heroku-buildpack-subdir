@@ -1,12 +1,14 @@
 # Heroku Buildpack Select Subdir
 
+NOTE: I couldn't find any working fork with the php buildpack. This one is working for me :)
+
 Allows you to have a monolithic repo with multiple Heroku apps in different subdirectories (like Google!).
 
 ## Usage
 
 * Write a bunch of Procfiles and scatter them throughout your code base.
 * Create a bunch of Heroku apps.
-* For each app do `heroku buildpacks:set -a <app> https://github.com/Pagedraw/heroku-buildpack-select-subdir`
+* For each app do `heroku buildpacks:set -a <app> https://github.com/magnetik/heroku-buildpack-subdir`
 * For each app, specify a `<subdir>` and a buildpack by setting
 ```heroku config:add BUILDPACK='<subdir>=https://github.com/desired/heroku-buildpack' -a <app>```
 * For each app, `git push git@heroku.com:<app> master`
